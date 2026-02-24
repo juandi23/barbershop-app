@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+$primary:  mat.define-palette(mat.$indigo-palette, 800);
+$accent:   mat.define-palette(mat.$amber-palette, 700);
+$warn:     mat.define-palette(mat.$red-palette);
+$theme: mat.define-light-theme((
+  color: (primary: $primary, accent: $accent, warn: $warn),
+  typography: mat.define-typography-config($font-family: "'Inter', sans-serif"),
+));
+@include mat.all-component-themes($theme);
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f8f9fa;
+  color: #212121;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 4px; }
+
+.mat-mdc-table { width: 100%; }
+
+/* Status chip colors */
+.status-pending   .mat-mdc-select-value { color: #ff9800; font-weight: 600; }
+.status-confirmed .mat-mdc-select-value { color: #2196f3; font-weight: 600; }
+.status-completed .mat-mdc-select-value { color: #4caf50; font-weight: 600; }
+.status-cancelled .mat-mdc-select-value { color: #f44336; font-weight: 600; }
