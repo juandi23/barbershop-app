@@ -12,14 +12,14 @@ import { ServiceService } from '../../services/service.service';
 import { Service } from '../../models/models';
 
 @Component({
-    selector: 'app-services',
-    standalone: true,
-    imports: [
-        CommonModule, ReactiveFormsModule,
-        MatTableModule, MatButtonModule, MatIconModule,
-        MatFormFieldModule, MatInputModule, MatCardModule, MatSnackBarModule,
-    ],
-    template: `
+  selector: 'app-services',
+  standalone: true,
+  imports: [
+    CommonModule, ReactiveFormsModule,
+    MatTableModule, MatButtonModule, MatIconModule,
+    MatFormFieldModule, MatInputModule, MatCardModule, MatSnackBarModule,
+  ],
+  template: `
     <div class="page-container">
       <div class="page-header">
         <h1><mat-icon>spa</mat-icon> Servicios</h1>
@@ -37,12 +37,12 @@ import { Service } from '../../models/models';
               <input matInput formControlName="name">
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Descripción</mat-label>
+              <mat-label>Descripcion</mat-label>
               <textarea matInput formControlName="description" rows="2"></textarea>
             </mat-form-field>
             <div class="two-col">
               <mat-form-field appearance="outline">
-                <mat-label>Duración (min)</mat-label>
+                <mat-label>Duracion (min)</mat-label>
                 <input matInput formControlName="duration_min" type="number">
               </mat-form-field>
               <mat-form-field appearance="outline">
@@ -64,12 +64,12 @@ import { Service } from '../../models/models';
           <td mat-cell *matCellDef="let s">{{s.name}}</td>
         </ng-container>
         <ng-container matColumnDef="duration">
-          <th mat-header-cell *matHeaderCellDef>Duración</th>
+          <th mat-header-cell *matHeaderCellDef>Duracion</th>
           <td mat-cell *matCellDef="let s">{{s.duration_min}} min</td>
         </ng-container>
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef>Precio</th>
-          <td mat-cell *matCellDef="let s">${{ s.price }}</td>
+          <td mat-cell *matCellDef="let s">{{ s.price | currency:'ARS':'symbol':'1.0-0' }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
@@ -83,7 +83,7 @@ import { Service } from '../../models/models';
       </table>
     </div>
   `,
-    styles: [`
+  styles: [`
     .page-container { padding: 32px 24px; }
     .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
     h1 { display: flex; align-items: center; gap: 8px; margin: 0; color: #1a1a2e; }
@@ -94,33 +94,33 @@ import { Service } from '../../models/models';
   `]
 })
 export class ServicesComponent implements OnInit {
-    services: Service[] = [];
-    columns = ['name', 'duration', 'price', 'actions'];
-    showForm = false;
-    editing: Service | null = null;
-    form = this.fb.group({
-        name: ['', Validators.required],
-        description: [''],
-        duration_min: [30, Validators.required],
-        price: [null, Validators.required],
-    });
+  services: Service[] = [];
+  columns = ['name', 'duration', 'price', 'actions'];
+  showForm = false;
+  editing: Service | null = null;
+  form = this.fb.group({
+    name: ['', Validators.required],
+    description: [''],
+    duration_min: [30, Validators.required],
+    price: [null, Validators.required],
+  });
 
-    constructor(private svc: ServiceService, private fb: FormBuilder, private snack: MatSnackBar) { }
-    ngOnInit(): void { this.load(); }
-    load(): void { this.svc.getAll().subscribe(s => this.services = s); }
+  constructor(private svc: ServiceService, private fb: FormBuilder, private snack: MatSnackBar) { }
+  ngOnInit(): void { this.load(); }
+  load(): void { this.svc.getAll().subscribe(s => this.services = s); }
 
-    save(): void {
-        if (this.editing) {
-            this.svc.update(this.editing.id!, this.form.value as Service).subscribe({ next: () => { this.load(); this.cancelForm(); } });
-        } else {
-            this.svc.create(this.form.value as Service).subscribe({ next: () => { this.load(); this.cancelForm(); } });
-        }
+  save(): void {
+    if (this.editing) {
+      this.svc.update(this.editing.id!, this.form.value as unknown as Service).subscribe({ next: () => { this.load(); this.cancelForm(); } });
+    } else {
+      this.svc.create(this.form.value as unknown as Service).subscribe({ next: () => { this.load(); this.cancelForm(); } });
     }
+  }
 
-    edit(s: Service): void { this.editing = s; this.form.patchValue(s); this.showForm = true; }
-    delete(s: Service): void {
-        if (!confirm(`¿Eliminar '${s.name}'?`)) return;
-        this.svc.delete(s.id!).subscribe({ next: () => this.load() });
-    }
-    cancelForm(): void { this.showForm = false; this.editing = null; this.form.reset({ duration_min: 30 }); }
+  edit(s: Service): void { this.editing = s; this.form.patchValue(s as any); this.showForm = true; }
+  delete(s: Service): void {
+    if (!confirm('Desea eliminar "' + s.name + '"?')) return;
+    this.svc.delete(s.id!).subscribe({ next: () => this.load() });
+  }
+  cancelForm(): void { this.showForm = false; this.editing = null; this.form.reset({ duration_min: 30 }); }
 }

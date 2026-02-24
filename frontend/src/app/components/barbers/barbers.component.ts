@@ -13,14 +13,14 @@ import { BarberService } from '../../services/barber.service';
 import { Barber } from '../../models/models';
 
 @Component({
-    selector: 'app-barbers',
-    standalone: true,
-    imports: [
-        CommonModule, ReactiveFormsModule,
-        MatTableModule, MatButtonModule, MatIconModule, MatFormFieldModule,
-        MatInputModule, MatDialogModule, MatCardModule, MatSnackBarModule,
-    ],
-    template: `
+  selector: 'app-barbers',
+  standalone: true,
+  imports: [
+    CommonModule, ReactiveFormsModule,
+    MatTableModule, MatButtonModule, MatIconModule, MatFormFieldModule,
+    MatInputModule, MatDialogModule, MatCardModule, MatSnackBarModule,
+  ],
+  template: `
     <div class="page-container">
       <div class="page-header">
         <h1><mat-icon>person</mat-icon> Barberos</h1>
@@ -74,7 +74,7 @@ import { Barber } from '../../models/models';
       </table>
     </div>
   `,
-    styles: [`
+  styles: [`
     .page-container { padding: 32px 24px; }
     .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
     h1 { display: flex; align-items: center; gap: 8px; margin: 0; color: #1a1a2e; }
@@ -84,28 +84,28 @@ import { Barber } from '../../models/models';
   `]
 })
 export class BarbersComponent implements OnInit {
-    barbers: Barber[] = [];
-    columns = ['name', 'email', 'bio', 'actions'];
-    showForm = false;
-    editing: Barber | null = null;
-    form = this.fb.group({ user_id: [null, Validators.required], bio: [''] });
+  barbers: Barber[] = [];
+  columns = ['name', 'email', 'bio', 'actions'];
+  showForm = false;
+  editing: Barber | null = null;
+  form = this.fb.group({ user_id: [null, Validators.required], bio: [''] });
 
-    constructor(private svc: BarberService, private fb: FormBuilder, private snack: MatSnackBar) { }
-    ngOnInit(): void { this.load(); }
-    load(): void { this.svc.getAll().subscribe(b => this.barbers = b); }
+  constructor(private svc: BarberService, private fb: FormBuilder, private snack: MatSnackBar) { }
+  ngOnInit(): void { this.load(); }
+  load(): void { this.svc.getAll().subscribe(b => this.barbers = b); }
 
-    save(): void {
-        if (this.editing) {
-            this.svc.update(this.editing.id!, this.form.value as Barber).subscribe({ next: () => { this.load(); this.cancelForm(); } });
-        } else {
-            this.svc.create(this.form.value as Barber).subscribe({ next: () => { this.load(); this.cancelForm(); } });
-        }
+  save(): void {
+    if (this.editing) {
+      this.svc.update(this.editing.id!, this.form.value as unknown as Barber).subscribe({ next: () => { this.load(); this.cancelForm(); } });
+    } else {
+      this.svc.create(this.form.value as unknown as Barber).subscribe({ next: () => { this.load(); this.cancelForm(); } });
     }
+  }
 
-    edit(b: Barber): void { this.editing = b; this.form.patchValue(b); this.showForm = true; }
-    delete(b: Barber): void {
-        if (!confirm(`¿Eliminar a ${b.User?.name}?`)) return;
-        this.svc.delete(b.id!).subscribe({ next: () => this.load() });
-    }
-    cancelForm(): void { this.showForm = false; this.editing = null; this.form.reset(); }
+  edit(b: Barber): void { this.editing = b; this.form.patchValue(b as any); this.showForm = true; }
+  delete(b: Barber): void {
+    if (!confirm(`¿Eliminar a ${b.User?.name}?`)) return;
+    this.svc.delete(b.id!).subscribe({ next: () => this.load() });
+  }
+  cancelForm(): void { this.showForm = false; this.editing = null; this.form.reset(); }
 }

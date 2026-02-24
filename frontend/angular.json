@@ -26,6 +26,20 @@
                             "src/styles.scss"
                         ],
                         "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractLicenses": true
+                        },
+                        "development": {
+                            "optimization": false,
+                            "outputHashing": "none",
+                            "sourceMap": true,
+                            "extractLicenses": false
+                        }
                     }
                 },
                 "serve": {

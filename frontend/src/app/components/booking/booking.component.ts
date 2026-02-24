@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,22 +9,22 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { AppointmentService } from '../../services/appointment.service';
 import { BarberService } from '../../services/barber.service';
 import { ServiceService } from '../../services/service.service';
 import { Barber, Service } from '../../models/models';
 
 @Component({
-    selector: 'app-booking',
-    standalone: true,
-    imports: [
-        CommonModule, ReactiveFormsModule,
-        MatFormFieldModule, MatInputModule, MatSelectModule,
-        MatDatepickerModule, MatNativeDateModule, MatButtonModule,
-        MatSnackBarModule, MatIconModule, MatStepperModule,
-    ],
-    template: `
+  selector: 'app-booking',
+  standalone: true,
+  imports: [
+    CommonModule, ReactiveFormsModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule,
+    MatDatepickerModule, MatNativeDateModule, MatButtonModule,
+    MatSnackBarModule, MatIconModule, MatStepperModule,
+  ],
+  template: `
     <div class="booking-container">
       <h1><mat-icon>calendar_today</mat-icon> Reservar Turno</h1>
 
@@ -35,10 +35,10 @@ import { Barber, Service } from '../../models/models';
           <form [formGroup]="clientForm">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Nombre completo</mat-label>
-              <input matInput formControlName="name" placeholder="Ej: Juan Pérez">
+              <input matInput formControlName="name" placeholder="Ej: Juan Perez">
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Teléfono</mat-label>
+              <mat-label>Telefono</mat-label>
               <input matInput formControlName="phone" placeholder="555-1234">
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width">
@@ -58,7 +58,7 @@ import { Barber, Service } from '../../models/models';
               <mat-label>Servicio</mat-label>
               <mat-select formControlName="service_id">
                 <mat-option *ngFor="let s of services" [value]="s.id">
-                  {{s.name}} — {{s.duration_min}}min · ${{ s.price }}
+                  {{s.name}} - {{s.duration_min}}min - {{ s.price | currency:'ARS':'symbol':'1.0-0' }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -87,7 +87,7 @@ import { Barber, Service } from '../../models/models';
               <textarea matInput formControlName="notes" rows="3"></textarea>
             </mat-form-field>
             <div class="step-actions">
-              <button mat-button matStepperPrevious>Atrás</button>
+              <button mat-button matStepperPrevious>Atras</button>
               <button mat-raised-button color="primary" (click)="submit()" [disabled]="appointmentForm.invalid || loading">
                 <mat-icon>check_circle</mat-icon> Confirmar Turno
               </button>
@@ -96,18 +96,18 @@ import { Barber, Service } from '../../models/models';
         </mat-step>
 
         <!-- Step 3: Confirmation -->
-        <mat-step label="¡Listo!">
+        <mat-step label="Listo!">
           <div class="success-msg">
             <mat-icon class="success-icon">check_circle</mat-icon>
-            <h2>¡Turno reservado con éxito!</h2>
-            <p>Te esperamos. ¡Hasta pronto!</p>
+            <h2>Turno reservado con exito!</h2>
+            <p>Te esperamos. Hasta pronto!</p>
             <button mat-raised-button color="primary" (click)="stepper.reset(); resetForms()">Reservar otro</button>
           </div>
         </mat-step>
       </mat-stepper>
     </div>
   `,
-    styles: [`
+  styles: [`
     .booking-container { max-width: 680px; margin: 32px auto; padding: 24px; }
     h1 { display: flex; align-items: center; gap: 8px; color: #1a1a2e; margin-bottom: 24px; }
     .full-width { width: 100%; margin-bottom: 12px; }
@@ -119,82 +119,80 @@ import { Barber, Service } from '../../models/models';
   `]
 })
 export class BookingComponent implements OnInit {
-    clientForm!: FormGroup;
-    appointmentForm!: FormGroup;
-    barbers: Barber[] = [];
-    services: Service[] = [];
-    loading = false;
-    minDate = new Date();
-    timeSlots = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+  @ViewChild('stepper') stepper!: MatStepper;
+  clientForm!: FormGroup;
+  appointmentForm!: FormGroup;
+  barbers: Barber[] = [];
+  services: Service[] = [];
+  loading = false;
+  minDate = new Date();
+  timeSlots = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
-    constructor(
-        private fb: FormBuilder,
-        private appointmentSvc: AppointmentService,
-        private barberSvc: BarberService,
-        private serviceSvc: ServiceService,
-        private snack: MatSnackBar,
-    ) { }
+  constructor(
+    private fb: FormBuilder,
+    private appointmentSvc: AppointmentService,
+    private barberSvc: BarberService,
+    private serviceSvc: ServiceService,
+    private snack: MatSnackBar,
+  ) { }
 
-    ngOnInit(): void {
-        this.clientForm = this.fb.group({
-            name: ['', Validators.required],
-            phone: ['', Validators.required],
-            email: [''],
+  ngOnInit(): void {
+    this.clientForm = this.fb.group({
+      name: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: [''],
+    });
+    this.appointmentForm = this.fb.group({
+      service_id: [null, Validators.required],
+      barber_id: [null, Validators.required],
+      date: [null, Validators.required],
+      time_slot: ['', Validators.required],
+      notes: [''],
+    });
+    this.barberSvc.getAll().subscribe(b => this.barbers = b);
+    this.serviceSvc.getAll().subscribe(s => this.services = s);
+  }
+
+  submit(): void {
+    if (this.clientForm.invalid || this.appointmentForm.invalid) return;
+    this.loading = true;
+    const clientData = this.clientForm.value;
+    const apptData = this.appointmentForm.value;
+    const dateStr = apptData.date instanceof Date
+      ? apptData.date.toISOString().split('T')[0]
+      : apptData.date;
+
+    fetch('http://localhost:3000/api/clients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(clientData)
+    })
+      .then(r => r.json())
+      .then(client => {
+        this.appointmentSvc.create({
+          ...apptData,
+          client_id: client.id,
+          date: dateStr,
+          time_slot: apptData.time_slot + ':00',
+        }).subscribe({
+          next: () => {
+            this.loading = false;
+            this.stepper.next();
+          },
+          error: (e) => {
+            this.loading = false;
+            this.snack.open(e.error?.message || 'Error al reservar', 'Cerrar', { duration: 4000 });
+          }
         });
-        this.appointmentForm = this.fb.group({
-            service_id: [null, Validators.required],
-            barber_id: [null, Validators.required],
-            date: [null, Validators.required],
-            time_slot: ['', Validators.required],
-            notes: [''],
-        });
-        this.barberSvc.getAll().subscribe(b => this.barbers = b);
-        this.serviceSvc.getAll().subscribe(s => this.services = s);
-    }
+      })
+      .catch(() => {
+        this.loading = false;
+        this.snack.open('No se pudo conectar al servidor', 'Cerrar', { duration: 4000 });
+      });
+  }
 
-    submit(): void {
-        if (this.clientForm.invalid || this.appointmentForm.invalid) return;
-        this.loading = true;
-        // First create client, then appointment
-        const clientData = this.clientForm.value;
-        const apptData = this.appointmentForm.value;
-        const dateStr = apptData.date instanceof Date
-            ? apptData.date.toISOString().split('T')[0]
-            : apptData.date;
-
-        // inline client creation — in a real app you might have a clientService
-        fetch('http://localhost:3000/api/clients', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(clientData)
-        })
-            .then(r => r.json())
-            .then(client => {
-                this.appointmentSvc.create({
-                    ...apptData,
-                    client_id: client.id,
-                    date: dateStr,
-                    time_slot: apptData.time_slot + ':00',
-                }).subscribe({
-                    next: () => {
-                        this.loading = false;
-                        // move to step 3
-                        document.querySelector('mat-stepper')?.setAttribute('selectedIndex', '2');
-                    },
-                    error: (e) => {
-                        this.loading = false;
-                        this.snack.open(e.error?.message || 'Error al reservar', 'Cerrar', { duration: 4000 });
-                    }
-                });
-            })
-            .catch(() => {
-                this.loading = false;
-                this.snack.open('No se pudo conectar al servidor', 'Cerrar', { duration: 4000 });
-            });
-    }
-
-    resetForms(): void {
-        this.clientForm.reset();
-        this.appointmentForm.reset();
-    }
+  resetForms(): void {
+    this.clientForm.reset();
+    this.appointmentForm.reset();
+  }
 }
