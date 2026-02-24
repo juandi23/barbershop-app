@@ -1,8 +1,8 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-$primary:  mat.define-palette(mat.$indigo-palette, 800);
-$accent:   mat.define-palette(mat.$amber-palette, 700);
+$primary:  mat.define-palette(mat.$brown-palette, 800);
+$accent:   mat.define-palette(mat.$deep-orange-palette, A200);
 $warn:     mat.define-palette(mat.$red-palette);
 $theme: mat.define-light-theme((
   color: (primary: $primary, accent: $accent, warn: $warn),
@@ -14,8 +14,8 @@ $theme: mat.define-light-theme((
 
 body {
   font-family: 'Inter', sans-serif;
-  background: #f8f9fa;
-  color: #212121;
+  background: radial-gradient(circle at top left, #111827 0, #020617 40%, #020617 100%);
+  color: #e5e7eb;
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -29,3 +29,21 @@ body {
 .status-confirmed .mat-mdc-select-value { color: #2196f3; font-weight: 600; }
 .status-completed .mat-mdc-select-value { color: #4caf50; font-weight: 600; }
 .status-cancelled .mat-mdc-select-value { color: #f44336; font-weight: 600; }
+
+/* Menú Admin más legible sobre fondo oscuro */
+.admin-menu-panel {
+  background: #f9fafb !important;
+  color: #111827;
+  box-shadow: 0 16px 40px rgba(0,0,0,.35);
+}
+.admin-menu-panel .mat-mdc-menu-item {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #111827;
+}
+.admin-menu-panel .mat-mdc-menu-item .mat-icon {
+  color: #4b5563;
+}
+.admin-menu-panel .mat-mdc-menu-item:hover {
+  background: #e5e7eb;
+}

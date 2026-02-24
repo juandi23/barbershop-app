@@ -13,11 +13,11 @@ INSERT INTO barbers (user_id, bio) VALUES
 
 -- Services
 INSERT INTO services (name, description, duration_min, price) VALUES
-('Corte de cabello',  'Corte clásico con tijeras o máquina', 30, 800.00),
-('Corte + Barba',     'Corte de cabello y arreglo de barba', 45, 1200.00),
-('Afeitado clásico',  'Afeitado con navaja y toalla caliente', 30, 600.00),
-('Degradado',         'Fade o degradado profesional', 40, 1000.00),
-('Tratamiento capilar','Hidratación y nutrición capilar', 60, 1500.00);
+('Corte de cabello',  'Corte clásico con tijeras o máquina', 30, 25000.00),
+('Corte + Barba',     'Corte de cabello y arreglo de barba', 45, 35000.00),
+('Afeitado clásico',  'Afeitado con navaja y toalla caliente', 30, 20000.00),
+('Degradado',         'Fade o degradado profesional', 40, 28000.00),
+('Tratamiento capilar','Hidratación y nutrición capilar', 60, 40000.00);
 
 -- Sample clients
 INSERT INTO clients (name, email, phone) VALUES

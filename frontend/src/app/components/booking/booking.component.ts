@@ -58,7 +58,7 @@ import { Barber, Service } from '../../models/models';
               <mat-label>Servicio</mat-label>
               <mat-select formControlName="service_id">
                 <mat-option *ngFor="let s of services" [value]="s.id">
-                  {{s.name}} - {{s.duration_min}}min - {{ s.price | currency:'ARS':'symbol':'1.0-0' }}
+                  {{s.name}} - {{s.duration_min}}min - {{ s.price | currency:'COP':'symbol':'1.0-0' }}
                 </mat-option>
               </mat-select>
             </mat-form-field>

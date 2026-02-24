@@ -68,8 +68,8 @@ import { Service } from '../../models/models';
           <td mat-cell *matCellDef="let s">{{s.duration_min}} min</td>
         </ng-container>
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef>Precio</th>
-          <td mat-cell *matCellDef="let s">{{ s.price | currency:'ARS':'symbol':'1.0-0' }}</td>
+          <th mat-header-cell *matHeaderCellDef>Precio (COP)</th>
+          <td mat-cell *matCellDef="let s">{{ s.price | currency:'COP':'symbol':'1.0-0' }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>

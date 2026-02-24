@@ -23,11 +23,15 @@ import { Appointment } from '../../models/models';
     template: `
     <div class="page-container">
       <div class="page-header">
-        <h1><mat-icon>event</mat-icon> Gestión de Turnos</h1>
+        <div class="title-group">
+          <h1><mat-icon>event</mat-icon> Gestión de Turnos</h1>
+          <p class="subtitle">Vista diaria de la agenda de la barbería</p>
+        </div>
         <span class="badge">{{appointments.length}} turnos</span>
       </div>
 
-      <table mat-table [dataSource]="appointments" class="mat-elevation-z4 full-width">
+      <mat-card class="appointments-card mat-elevation-z8">
+        <table mat-table [dataSource]="appointments" class="full-width">
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Fecha</th>
           <td mat-cell *matCellDef="let a">{{a.date | date:'dd/MM/yyyy'}}</td>
@@ -68,14 +72,67 @@ import { Appointment } from '../../models/models';
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let row; columns: columns;"></tr>
-      </table>
+        </table>
+      </mat-card>
     </div>
   `,
     styles: [`
-    .page-container { padding: 32px 24px; }
-    .page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-    h1 { display: flex; align-items: center; gap: 8px; margin: 0; color: #1a1a2e; }
-    .badge { background: #f0a500; color: white; padding: 4px 12px; border-radius: 20px; font-weight: bold; }
+    .page-container {
+      padding: 32px 24px 40px;
+      min-height: calc(100vh - 64px);
+    }
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      color: #f9fafb;
+    }
+    .title-group h1 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-weight: 600;
+    }
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .badge {
+      background: linear-gradient(135deg,#f0a500,#ff6b35);
+      color: #111827;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .appointments-card {
+      background: #f9fafb;
+      color: #111827;
+      border-radius: 18px;
+      padding: 8px 0;
+      overflow: hidden;
+      box-shadow: 0 18px 45px rgba(0,0,0,.25);
+      border: 1px solid rgba(148,163,184,0.6);
+    }
+    table { background: transparent; }
+    th.mat-header-cell {
+      background: #111827;
+      color: #f9fafb;
+      font-weight: 600;
+    }
+    td.mat-cell, th.mat-header-cell {
+      border-color: rgba(209,213,219,0.9);
+    }
+    tr.mat-row:nth-child(odd) td.mat-cell {
+      background: #ffffff;
+    }
+    tr.mat-row:nth-child(even) td.mat-cell {
+      background: #f3f4f6;
+    }
     .full-width { width: 100%; }
     .status-select { font-size: 0.85rem; }
     .status-pending   { color: #ff9800; }
