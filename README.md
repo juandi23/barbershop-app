@@ -6,7 +6,7 @@
 
 Sistema de gestión de turnos para barbería con panel administrativo completo.
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades pro
 
 - 📅 **Reserva de turnos** — Los clientes pueden reservar sin necesidad de registrarse
 - 🔐 **Panel Admin** — Gestión de turnos, barberos y servicios con autenticación JWT
